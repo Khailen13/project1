@@ -20,19 +20,18 @@ def filter_by_state(transactions: list, req_state: str = "EXECUTED") -> list | s
         return incorrect_input_message
 
 
-def sort_by_date(transactions: list, reverse_order: bool = True) -> list:
+def sort_by_date(transactions: list, reverse_order: bool = True) -> list | str:
     """Принимает список словарей и необязательный параметр, задающий порядок сортировки (по умолчанию — убывание)"""
-    # {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-    # Проверка соотвествия входного формата
-    incorrect_input_message = "Некорректные данные"
-    correct_transaction_presence = False  # признак наличия в списке транзакции с корректной датой
-    correct_transactions = []  # список транзакций с корректыными датами
-    if len(transactions) == 0:  # пустой список
+
+    incorrect_input_message = "Некорректные данные"  # Сообщение при неправильном вводе
+    correct_transaction_presence = False  # Признак наличия в списке транзакции с корректной датой
+    correct_transactions = []  # Список транзакций с корректыными датами
+    if len(transactions) == 0:  # Пустой список
         return incorrect_input_message
     else:
         for transaction in transactions:
-            if "date" in transaction: # наличие ключа "date"
-                if len(transaction["date"]) >= 18:  # не менее 18 символов - признак корректности данных
+            if "date" in transaction:  # Наличие ключа "date"
+                if len(transaction["date"]) >= 18:  # Не менее 18 символов - признак корректности данных
                     year = transaction["date"][0:4]
                     month = transaction["date"][5:7]
                     day = transaction["date"][8:10]
@@ -40,7 +39,7 @@ def sort_by_date(transactions: list, reverse_order: bool = True) -> list:
                     minutes = transaction["date"][14:16]
                     seconds = transaction["date"][17:]
                     if (
-                        year.isdigit()  # проверка частей даты ожидаемому формату
+                        year.isdigit()  # Проверка частей даты ожидаемому формату
                         and transaction["date"][4] == "-"
                         and month.isdigit()
                         and 1 <= int(month) <= 12
@@ -56,7 +55,7 @@ def sort_by_date(transactions: list, reverse_order: bool = True) -> list:
                     ):
                         correct_transaction_presence = True
                         correct_transactions.append(transaction)
-    if correct_transaction_presence:
+    if correct_transaction_presence:  # Сортировка по дате для транзакций с ожидаемым форматом
         return sorted(
             correct_transactions,
             key=lambda x: (
@@ -69,3 +68,5 @@ def sort_by_date(transactions: list, reverse_order: bool = True) -> list:
             ),
             reverse=reverse_order,
         )
+    else:
+        return incorrect_input_message

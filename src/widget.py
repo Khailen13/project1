@@ -11,19 +11,19 @@ def mask_account_card(type_and_number: str) -> str:
         splited_items = type_and_number.split()
         if not splited_items[0].isalpha():  # Строка начинается не с букв - некорректный ввод
             return incorrect_input_message
-        else:  # Количество цифровой части отлична от единицы - некорректный ввод
+        else:  # Подсчет количества непрерывных цифровых частей
             digits_presence = 0
             for item in splited_items:
                 if item.isdigit():
                     digits_presence += 1
-            if digits_presence != 1:
+            if digits_presence != 1:  # Если количество цифровой части отлична от единицы - некорректный ввод
                 return incorrect_input_message
             else:  # В остальных случаях
                 masked_number = ""
                 for item in splited_items:
-                    if item.isalpha():  # включение буквенной части
+                    if item.isalpha():  # Включение в маску буквенной части
                         masked_number += f"{item} "
-                    elif item.isdigit():  # включение цифровой части
+                    elif item.isdigit():  # Включение  в маску цифровой части
                         if splited_items[0] == "Счет":
                             masked_number += get_mask_account(item)
                         else:
@@ -39,13 +39,13 @@ def get_date(initial_format_date: str) -> str:
     и возвращает строку с датой в формате "ДД.ММ.ГГГГ" ("11.03.2024")"""
 
     incorrect_input_message = "Неправильный ввод данных"
-    if len(initial_format_date) < 10:  # если менее 10 символов в строке - некорректный ввод
+    if len(initial_format_date) < 10:  # Если менее 10 символов в строке - некорректный ввод
         return incorrect_input_message
     else:
         year = initial_format_date[0:4]
         month = initial_format_date[5:7]
         day = initial_format_date[8:10]
-        if (
+        if (  # Проверка соответствия формата ожидаемому
             year.isdigit()
             and initial_format_date[4] == "-"
             and month.isdigit()
@@ -53,7 +53,7 @@ def get_date(initial_format_date: str) -> str:
             and initial_format_date[7] == "-"
             and day.isdigit()
             and 1 <= int(day) <= 31
-        ):  # соответствие входного формата
+        ):
             return f"{day}.{month}.{year}"
         else:
             return incorrect_input_message

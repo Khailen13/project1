@@ -3,6 +3,7 @@ import pytest
 from src.widget import get_date, mask_account_card
 
 
+# Набор тестов для mask_account_card
 @pytest.mark.parametrize(
     "input_data, masked_data",
     [
@@ -19,10 +20,11 @@ from src.widget import get_date, mask_account_card
         ("", "Неправильный ввод данных"),
     ],
 )
-def test_mask_account_card(input_data, masked_data):
+def test_mask_account_card(input_data: str, masked_data: str) -> str:
     assert mask_account_card(input_data) == masked_data
 
 
+# Набор тестов для test_get_date
 @pytest.mark.parametrize(
     "initial_date, new_format_date",
     [
@@ -33,5 +35,5 @@ def test_mask_account_card(input_data, masked_data):
         ("", "Неправильный ввод данных"),
     ],
 )
-def test_get_date(initial_date, new_format_date):
+def test_get_date(initial_date: str, new_format_date: str) -> str:
     assert get_date(initial_date) == new_format_date
