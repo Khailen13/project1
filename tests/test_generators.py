@@ -1,4 +1,4 @@
-from src.generators import filter_by_currency, transaction_descriptions
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
 def test_filter_by_currency_1(transactions):
@@ -61,6 +61,32 @@ def test_filter_by_currency_4():
     assert next(filter_function) == inappropriate_structure_message
 
 
+def test_filter_by_currency_5(transactions):
+    """Проверка случая превышения количества запросов соответствующего количества транзакций"""
+
+    end_message = "Конец списка транзакций"
+    filter_function = filter_by_currency(transactions, "RUB")
+    assert next(filter_function) == {
+        "id": 873106923,
+        "state": "EXECUTED",
+        "date": "2019-03-23T01:09:46.296404",
+        "operationAmount": {"amount": "43318.34", "currency": {"name": "руб.", "code": "RUB"}},
+        "description": "Перевод со счета на счет",
+        "from": "Счет 44812258784861134719",
+        "to": "Счет 74489636417521191160",
+    }
+    assert next(filter_function) == {
+        "id": 594226727,
+        "state": "CANCELED",
+        "date": "2018-09-12T21:27:25.241689",
+        "operationAmount": {"amount": "67314.70", "currency": {"name": "руб.", "code": "RUB"}},
+        "description": "Перевод организации",
+        "from": "Visa Platinum 1246377376343588",
+        "to": "Счет 14211924144426031657",
+    }
+    assert next(filter_function) == end_message
+
+
 def test_transaction_descriptions_1(transactions):
     """Проверка вывода описаний 5 транзакций"""
 
@@ -86,7 +112,7 @@ def test_transaction_descriptions_2(transactions):
 
 
 def test_transaction_descriptions_3():
-    """Проверка вывода описаний транзакций большего количества, чем в исходном списке"""
+    """Проверка случая пустого списка транзакций"""
 
     blank_list_message = "Список транзакций пуст"
     transaction_description = transaction_descriptions([])
@@ -94,7 +120,7 @@ def test_transaction_descriptions_3():
 
 
 def test_transaction_descriptions_4():
-    """Проверка на соответствие структуры входного списка ожидаемой"""
+    """Проверка на несоответствие структуры входного списка ожидаемой"""
 
     inappropriate_structure_message = "Несоответствующая структура данных"
     transaction_description = transaction_descriptions(
@@ -109,3 +135,38 @@ def test_transaction_descriptions_4():
         ]
     )
     assert (next(transaction_description)) == inappropriate_structure_message
+
+
+def test_card_number_generator_1():
+    """Проверка вывода номеров карт в интервале [1;5]"""
+
+    generator = card_number_generator(1, 5)
+    assert next(generator) == "0000 0000 0000 0001"
+    assert next(generator) == "0000 0000 0000 0002"
+    assert next(generator) == "0000 0000 0000 0003"
+    assert next(generator) == "0000 0000 0000 0004"
+    assert next(generator) == "0000 0000 0000 0005"
+
+
+def test_card_number_generator_2():
+    """Проверка ввода отрицательного значения"""
+
+    incorrect_input_message = "Некорректный диапазон"
+    generator = card_number_generator(-1, 5)
+    assert next(generator) == incorrect_input_message
+
+
+def test_card_number_generator_3():
+    """Проверка случая: конечное значение больше начального"""
+
+    incorrect_input_message = "Некорректный диапазон"
+    generator = card_number_generator(5, 1)
+    assert next(generator) == incorrect_input_message
+
+
+def test_card_number_generator_4():
+    """Проверка случая: конечное значение больше 9999_9999_9999_9999"""
+
+    incorrect_input_message = "Некорректный диапазон"
+    generator = card_number_generator(1, 10**16)
+    assert next(generator) == incorrect_input_message
