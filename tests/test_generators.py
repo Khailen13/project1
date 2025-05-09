@@ -1,6 +1,4 @@
-import pytest
-
-from src.generators import filter_by_currency
+from src.generators import filter_by_currency, transaction_descriptions
 
 
 def test_filter_by_currency_1(transactions):
@@ -30,9 +28,7 @@ def test_filter_by_currency_1(transactions):
 def test_filter_by_currency_2():
     """Проверка на пустой входной список транзакций"""
 
-    currency_lack_message = "Транзакции в запрашиваемой валюте отсутствуют"
     blank_list_message = "Список транзакций пуст"
-    inappropriate_structure_message = "Несоответствующая структура данных"
     filter_function = filter_by_currency([], "USD")
     assert next(filter_function) == blank_list_message
 
@@ -63,3 +59,53 @@ def test_filter_by_currency_4():
         "USD",
     )
     assert next(filter_function) == inappropriate_structure_message
+
+
+def test_transaction_descriptions_1(transactions):
+    """Проверка вывода описаний 5 транзакций"""
+
+    transaction_description = transaction_descriptions(transactions)
+    assert (next(transaction_description)) == "Перевод организации"
+    assert (next(transaction_description)) == "Перевод со счета на счет"
+    assert (next(transaction_description)) == "Перевод со счета на счет"
+    assert (next(transaction_description)) == "Перевод с карты на карту"
+    assert (next(transaction_description)) == "Перевод организации"
+
+
+def test_transaction_descriptions_2(transactions):
+    """Проверка вывода описаний транзакций большего количества, чем в исходном списке"""
+
+    end_message = "Конец списка транзакций"
+    transaction_description = transaction_descriptions(transactions)
+    assert (next(transaction_description)) == "Перевод организации"
+    assert (next(transaction_description)) == "Перевод со счета на счет"
+    assert (next(transaction_description)) == "Перевод со счета на счет"
+    assert (next(transaction_description)) == "Перевод с карты на карту"
+    assert (next(transaction_description)) == "Перевод организации"
+    assert (next(transaction_description)) == end_message
+
+
+def test_transaction_descriptions_3():
+    """Проверка вывода описаний транзакций большего количества, чем в исходном списке"""
+
+    blank_list_message = "Список транзакций пуст"
+    transaction_description = transaction_descriptions([])
+    assert (next(transaction_description)) == blank_list_message
+
+
+def test_transaction_descriptions_4():
+    """Проверка на соответствие структуры входного списка ожидаемой"""
+
+    inappropriate_structure_message = "Несоответствующая структура данных"
+    transaction_description = transaction_descriptions(
+        [
+            {
+                "id": 142264268,
+                "state": "EXECUTED",
+                "date": "2019-04-04T23:20:05.206878",
+                "from": "Счет 19708645243227258542",
+                "to": "Счет 75651667383060284188",
+            }
+        ]
+    )
+    assert (next(transaction_description)) == inappropriate_structure_message
