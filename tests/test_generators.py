@@ -1,3 +1,5 @@
+import pytest
+
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
@@ -137,36 +139,32 @@ def test_transaction_descriptions_4():
     assert (next(transaction_description)) == inappropriate_structure_message
 
 
-def test_card_number_generator_1():
-    """Проверка вывода номеров карт в интервале [1;5]"""
-
-    generator = card_number_generator(1, 5)
-    assert next(generator) == "0000 0000 0000 0001"
-    assert next(generator) == "0000 0000 0000 0002"
-    assert next(generator) == "0000 0000 0000 0003"
-    assert next(generator) == "0000 0000 0000 0004"
-    assert next(generator) == "0000 0000 0000 0005"
+# Проверка вывода номеров карт в интервале [1;5]
+generator_1 = card_number_generator(1, 5)
 
 
-def test_card_number_generator_2():
-    """Проверка ввода отрицательного значения"""
-
-    incorrect_input_message = "Некорректный диапазон"
-    generator = card_number_generator(-1, 5)
-    assert next(generator) == incorrect_input_message
-
-
-def test_card_number_generator_3():
-    """Проверка случая: конечное значение больше начального"""
-
-    incorrect_input_message = "Некорректный диапазон"
-    generator = card_number_generator(5, 1)
-    assert next(generator) == incorrect_input_message
+@pytest.mark.parametrize(
+    "generated_number",
+    [
+        ("0000 0000 0000 0001"),
+        ("0000 0000 0000 0002"),
+        ("0000 0000 0000 0003"),
+        ("0000 0000 0000 0004"),
+        ("0000 0000 0000 0005"),
+    ],
+)
+def test_card_number_generator_1(generated_number: str):
+    assert next(generator_1) == generated_number
 
 
-def test_card_number_generator_4():
-    """Проверка случая: конечное значение больше 9999_9999_9999_9999"""
-
-    incorrect_input_message = "Некорректный диапазон"
-    generator = card_number_generator(1, 10**16)
-    assert next(generator) == incorrect_input_message
+# Проверка случаев по порядку:
+# 1. Ввод отрицательного значения;
+# 2. Конечное значение больше начального;
+# 3. Конечное значение больше 9999_9999_9999_9999
+@pytest.mark.parametrize(
+    "start, stop, message",
+    [(-1, 5, "Некорректный диапазон"), (5, 1, "Некорректный диапазон"), (1, 10**16, "Некорректный диапазон")],
+)
+def test_card_number_generator_5(start, stop, message):
+    generator = card_number_generator(start, stop)
+    assert next(generator) == message

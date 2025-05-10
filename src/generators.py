@@ -49,16 +49,16 @@ def transaction_descriptions(transactions: list):
             i += 1
 
 
-def card_number_generator(start: int, end: int):
+def card_number_generator(start: int, stop: int):
     """Выдает номера банковских карт в формате XXXX XXXX XXXX XXXX, где X — цифра номера карты.
     Генератор может сгенерировать номера карт в заданном диапазоне от 0000 0000 0000 0001 до 9999 9999 9999 9999."""
 
     incorrect_input_message = "Некорректный диапазон"
-    if start <= 0 or start > end or end >= 10**16:
+    if start <= 0 or start > stop or stop >= 10**16:
         yield incorrect_input_message
     else:
         card_numbers_count = 16
-        for number in range(start, end + 1):
+        for number in range(start, stop + 1):
             numbers_count = len(str(number))
             blank_pos_count = card_numbers_count - numbers_count
             card_number_conjoint = f'{blank_pos_count*"0"}{number}'
