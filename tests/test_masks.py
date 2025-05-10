@@ -1,7 +1,7 @@
 from src.masks import get_mask_account, get_mask_card_number
 
 
-def test_get_mask_card_number() -> str:
+def test_get_mask_card_number():
     """Набор тестов для get_mask_card_number"""
 
     incorrect_input_message = "Номер карты введен не правильно"
@@ -12,7 +12,7 @@ def test_get_mask_card_number() -> str:
     assert get_mask_card_number("") == incorrect_input_message  # Некорректный ввод: пустая строка
 
 
-def test_get_mask_account() -> str:
+def test_get_mask_account():
     incorrect_input_message = "Номер счета введен не правильно"
     assert get_mask_account(73654108430135874305) == "**4305"  # Корректный номер в виде цифр
     assert get_mask_account("abcd4108430135874305") == incorrect_input_message  # Некорректный ввод: буквы+цифры

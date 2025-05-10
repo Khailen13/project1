@@ -3,7 +3,7 @@ import pytest
 from src.processing import filter_by_state, sort_by_date
 
 
-def test_filter_by_state_1(initial_transactions: list) -> list | str:
+def test_filter_by_state_1(initial_transactions):
     # Проверка статуса 'EXECUTED' при отсутствии непосредственного ввода статуса
 
     assert filter_by_state(initial_transactions) == [
@@ -48,12 +48,12 @@ def test_filter_by_state_1(initial_transactions: list) -> list | str:
         ),
     ],
 )
-def test_filter_by_state_2(transactions: list, req_state: str) -> list | str:
+def test_filter_by_state_2(transactions: list, req_state: str):
     incorrect_input_message = "Неправильный ввод данных"
     assert filter_by_state(transactions, req_state) == incorrect_input_message
 
 
-def test_sort_by_date_1(initial_transactions: list, reverse_order: bool = True) -> list | str:
+def test_sort_by_date_1(initial_transactions: list, reverse_order: bool = True):
     """Проверка сортировки по убыванию"""
 
     assert sort_by_date(initial_transactions) == [
@@ -64,7 +64,7 @@ def test_sort_by_date_1(initial_transactions: list, reverse_order: bool = True) 
     ]
 
 
-def test_sort_by_date_2(initial_transactions: list, reverse_order: bool = True) -> list | str:
+def test_sort_by_date_2(initial_transactions: list, reverse_order: bool = True):
     """Проверка сортировки по возрастанию"""
 
     assert sort_by_date(initial_transactions, False) == [
@@ -75,7 +75,7 @@ def test_sort_by_date_2(initial_transactions: list, reverse_order: bool = True) 
     ]
 
 
-def test_sort_by_date_3(same_day_transactions: list, reverse_order: bool = True) -> list | str:
+def test_sort_by_date_3(same_day_transactions: list, reverse_order: bool = True):
     """Проверка сортировки по убыванию при одинаковых датах - сортировка по часам-минутам-секундам"""
 
     assert sort_by_date(same_day_transactions) == [
