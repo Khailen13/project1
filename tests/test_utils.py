@@ -17,6 +17,7 @@ def test_json_reader_success():
     mock = mock_open(read_data=coorect_contetnt)
     with patch("builtins.open", mock):
         assert (json_reader("")) == json.loads(coorect_contetnt)
+        mock.assert_called_once()
 
 
 def test_json_reader_FileNotFoundError():

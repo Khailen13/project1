@@ -22,6 +22,7 @@ def test_current_converter_USD(transactions_for_ext_api):
             "result": 123,
         }
         assert current_converter(transactions_for_ext_api[1]) == 123
+        mock_get.assert_called_once()
 
 
 def test_current_converter_EUR(transactions_for_ext_api):
@@ -36,3 +37,4 @@ def test_current_converter_EUR(transactions_for_ext_api):
             "result": 123,
         }
         assert current_converter(transactions_for_ext_api[0]) == 123
+        mock_get.assert_called_once()
