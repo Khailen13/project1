@@ -2,11 +2,12 @@ import os
 
 import requests
 from dotenv import load_dotenv
+from mypy.types import Any
 
 load_dotenv()
 
 
-def current_converter(transaction_info: dict) -> float:
+def current_converter(transaction_info: dict) -> Any:
     """Принимает на вход транзакцию и возвращает сумму транзакции (amount) в рублях"""
 
     currency = transaction_info["operationAmount"]["currency"]["code"]
@@ -20,6 +21,5 @@ def current_converter(transaction_info: dict) -> float:
         headers = {"apikey": api_key}
         response = requests.get(url, headers=headers, params=payload)
         result = response.json()
-        print(result)
         amount_converted = result["result"]
         return amount_converted
