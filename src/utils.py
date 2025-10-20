@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from typing import Any
 
 logger = logging.getLogger(__name__)
 root_dir_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -12,7 +13,7 @@ logger.addHandler(file_handler)
 logger.setLevel(logging.DEBUG)
 
 
-def json_reader(file_path: str) -> list:
+def json_reader(file_path: str) -> Any:
     """Принимает на вход путь до JSON-файла и возвращает список словарей с данными о финансовых транзакциях"""
 
     try:

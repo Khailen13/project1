@@ -1,4 +1,7 @@
-def filter_by_currency(transactions: list, currency: str):
+from typing import Generator
+
+
+def filter_by_currency(transactions: list, currency: str) -> Generator:
     """Возвращает итератор, который поочередно выдает транзакции, где валюта операции соответствует заданной"""
 
     i = 0
@@ -27,7 +30,7 @@ def filter_by_currency(transactions: list, currency: str):
         i += 1
 
 
-def transaction_descriptions(transactions: list):
+def transaction_descriptions(transactions: list) -> Generator:
     """Возвращает описание каждой транзакции по очереди"""
 
     i = 0
@@ -49,7 +52,7 @@ def transaction_descriptions(transactions: list):
             i += 1
 
 
-def card_number_generator(start: int, stop: int):
+def card_number_generator(start: int, stop: int) -> Generator:
     """Выдает номера банковских карт в формате XXXX XXXX XXXX XXXX, где X — цифра номера карты.
     Генератор может сгенерировать номера карт в заданном диапазоне от 0000 0000 0000 0001 до 9999 9999 9999 9999."""
 
