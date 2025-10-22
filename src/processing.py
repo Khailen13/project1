@@ -7,11 +7,12 @@ def filter_by_state(transactions: list, req_state: str = "EXECUTED") -> list | s
         relevant_transcations = []  # Возвращаемый список
         for transaction in transactions:
             if ("state" in transaction) and (
-                req_state.upper() == "EXECUTED" or req_state.upper() == "CANCELED"
+                req_state.upper() in ("EXECUTED", "CANCELED", "PENDING")
             ):  # Наличие ключа "state" и правильность заправшиваемого статуса
                 correct_input = True
-                if transaction["state"].upper() == req_state.upper():  # Соответствие запрашиваемому статусу
-                    relevant_transcations.append(transaction)
+                if type(transaction["state"]) is str:
+                    if transaction["state"].upper() == req_state.upper():  # Соответствие запрашиваемому статусу
+                        relevant_transcations.append(transaction)
         if correct_input:  # При правильном вводе
             return relevant_transcations
         else:  # При отсутствии ключа "state" или ошибке в запрашиваемом статусе

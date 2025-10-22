@@ -1,4 +1,7 @@
-def log(filename: str = "console"):
+from typing import Callable
+
+
+def log(filename: str = "console") -> Callable:
     """Регистрирует детали выполнения функций, такие как имя функции, передаваемые аргументы,
     результат выполнения и информация об ошибках"""
 
